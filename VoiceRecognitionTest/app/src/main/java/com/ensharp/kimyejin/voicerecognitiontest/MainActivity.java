@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id) {
             case R.id.inputButton:
                 soundManager.onInputButtonClick();
+                analyzer.clearAllInformation();
                 break;
             case R.id.outputButton:
                 soundManager.onOutputButtonClick();

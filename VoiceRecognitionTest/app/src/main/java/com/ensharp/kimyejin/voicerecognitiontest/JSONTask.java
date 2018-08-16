@@ -32,8 +32,6 @@ public class JSONTask extends AsyncTask<String, String, String> {
         this.column = column;
         this.value = value;
         this.purpose = purpose;
-
-        Log.e("aaaa_mode", "value:"+value+"\n");
     }
 
     @Override
@@ -118,24 +116,36 @@ public class JSONTask extends AsyncTask<String, String, String> {
         switch (purpose) {
             case Constant.DESTINATION:
                 analyzer.setDestination(result);
-                Log.e("aaaa_mode", "destination");
                 break;
             case Constant.DEPARTURE:
                 analyzer.setDeparture(result);
-                Log.e("aaaa_mode", "departure");
                 break;
             case Constant.INTEND:
                 analyzer.setIntend(result);
-                Log.e("aaaa_mode", "intend");
                 break;
             case Constant.END:
-                Log.e("aaaa_mode", "end");
                 analyzer.printWords();
                 break;
+            case Constant.NOUN:
+                discernNoun(result);
+                break;
+            case Constant.VERB:
+                analyzer.setIntend(result);
+                break;
         }
+
+        if (analyzer.getIsEnd())
+            analyzer.printWords();
     }
 
     public void setAnalyzer(Analyzer analyzer) {
         this.analyzer = analyzer;
+    }
+
+    public void discernNoun(String result) {
+        if (result.equals("null"))
+            analyzer.anaylizeVerb(analyzer.getWord());
+        else
+            analyzer.setDestination(result);
     }
 }

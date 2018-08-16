@@ -1,7 +1,5 @@
 package com.ensharp.kimyejin.voicerecognitiontest;
 
-import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -9,15 +7,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class Analyzer {
 
 	private MainActivity main;
 	JSONTask serverManager;
 	private String serverAddress;
+	private boolean isEnd;
+	private String word;
 
 	private Scanner reader = new Scanner(System.in);
 	private String line;
@@ -39,7 +36,7 @@ public class Analyzer {
 		line = ((TextView)main.findViewById(R.id.inputText)).getText().toString();
 
 		analyzeWords();
-		executeServer("noun", "name", "태능", Constant.END);
+		isEnd = true;
 	}
 	
 	public void clearAllInformation() {
@@ -47,9 +44,10 @@ public class Analyzer {
 		departure = "";
 		destination = "";
 		intend = "";
-	}
+}
 	
 	public void analyzeWords() {
+		isEnd = false;
 		words = Arrays.asList(line.split(" "));
 
 		for (int i = 0; i < words.size(); i++) {
@@ -59,6 +57,7 @@ public class Analyzer {
 	
 	public void separateIntoMorpheme(String word) {
 		String temp;
+		this.word = word;
 
 		for (int i = 0; i < josas.length; i++) {
 			if (word.contains(josas[i])) {
@@ -80,24 +79,14 @@ public class Analyzer {
 			}
 		}
 
+		executeServer("noun", "name", word, Constant.NOUN);
+	}
+
+	public void anaylizeVerb(String word) {
 		executeServer("verb", "name", word, Constant.INTEND);
 	}
 	
 	public void printWords() {
-//		StringBuilder stringBuilder = new StringBuilder();
-//
-//		if (departure.isEmpty())
-//			departure = "없음";
-//		stringBuilder.append(String.format("출발지 : %s\n", departure));
-//
-//		if (destination.isEmpty())
-//			destination = "없음";
-//		stringBuilder.append(String.format("도착지 : %s\n", destination));
-//
-//		if (intend.isEmpty())
-//			intend = "없음";
-//		stringBuilder.append(String.format("의도 : %s\n", intend));
-
 		((EditText)main.findViewById(R.id.detailInformation)).setText(getResult());
 	}
 
@@ -130,4 +119,8 @@ public class Analyzer {
 
 		return result.toString();
 	}
+
+	public boolean getIsEnd() {return isEnd;}
+
+	public String getWord() {return word;}
 }

@@ -33,7 +33,6 @@ public class SoundManager implements TextToSpeechListener, SpeechRecognizeListen
     }
 
     public void onInputButtonClick() {
-        Log.e("SPEECH_MODE", "speechStart");
         isSpeechMode = true;
         SpeechRecognizerClient.Builder builder = new SpeechRecognizerClient.Builder().setServiceType(serviceType);
         client = builder.build();
@@ -55,8 +54,7 @@ public class SoundManager implements TextToSpeechListener, SpeechRecognizeListen
                 .setListener(this)
                 .build();
 
-        if (ttsClient.play(output))
-            Log.e("LISTEN_MODE", "읽을 메시지:"+output);
+        ttsClient.play(output);
     }
 
     @Override
@@ -84,7 +82,6 @@ public class SoundManager implements TextToSpeechListener, SpeechRecognizeListen
         // result of user input
         String result = results.getStringArrayList(SpeechRecognizerClient.KEY_RECOGNITION_RESULTS).get(0);
         ((TextView)main.findViewById(R.id.inputText)).setText(result);
-        Log.e("SPEECH_MODE", "OnResults");
 
         client = null;
     }
@@ -96,26 +93,15 @@ public class SoundManager implements TextToSpeechListener, SpeechRecognizeListen
 
     @Override
     public void onFinished() {
-        if (isSpeechMode) {
-            Log.e("SPEECH_MODE", "onFinished");
+        if (isSpeechMode)
             isSpeechMode = false;
-        }
-        else {
-            int intSentSize = ttsClient.getSentDataSize();      //세션 중에 전송한 데이터 사이즈
-            int intRecvSize = ttsClient.getReceivedDataSize();  //세션 중에 전송받은 데이터 사이즈
-
-            final String strInacctiveText = "handleFinished() SentSize : " + intSentSize + "  RecvSize : " + intRecvSize;
-
-            Log.e("LISTEN_MODE", strInacctiveText);
-            Log.e("LISTEN_MODE", "listenOnFinished");
+        else
             ttsClient = null;
-        }
     }
 
     @Override
     public void onError(int code, String message) {
         if (isSpeechMode) {
-            Log.e("SPEECH_MODE", "ERROR:" + message);
             client = null;
             isSpeechMode = false;
         }

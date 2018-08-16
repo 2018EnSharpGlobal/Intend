@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.ensharp.kimyejin.voicerecognitiontest.InformationExtractor.Analyzer;
+import com.ensharp.kimyejin.voicerecognitiontest.InformationExtractor.SoundManager;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private SoundManager soundManager;

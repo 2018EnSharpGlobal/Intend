@@ -1,9 +1,11 @@
-package com.ensharp.kimyejin.voicerecognitiontest;
+package com.ensharp.kimyejin.voicerecognitiontest.InformationExtractor;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.ensharp.kimyejin.voicerecognitiontest.MainActivity;
+import com.ensharp.kimyejin.voicerecognitiontest.R;
 import com.kakao.sdk.newtoneapi.SpeechRecognizeListener;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerClient;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager;

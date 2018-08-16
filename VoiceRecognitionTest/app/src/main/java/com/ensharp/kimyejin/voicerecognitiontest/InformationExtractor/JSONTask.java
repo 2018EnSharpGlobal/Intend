@@ -1,7 +1,8 @@
-package com.ensharp.kimyejin.voicerecognitiontest;
+package com.ensharp.kimyejin.voicerecognitiontest.InformationExtractor;
 
 import android.os.AsyncTask;
-import android.util.Log;
+
+import com.ensharp.kimyejin.voicerecognitiontest.Constant;
 
 import org.json.JSONObject;
 

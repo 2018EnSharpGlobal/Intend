@@ -12,7 +12,7 @@
         android:layout_height="29dp"
         android:layout_marginBottom="40dp"
         android:layout_marginTop="44dp"
-        android:text="상봉에서 군자로 갈래"
+        android:text="에서 군자로 갈래"
         app:layout_constraintBottom_toTopOf="@+id/detailInformation"
         app:layout_constraintEnd_toEndOf="@+id/outputButton"
         app:layout_constraintStart_toStartOf="@+id/inputButton"

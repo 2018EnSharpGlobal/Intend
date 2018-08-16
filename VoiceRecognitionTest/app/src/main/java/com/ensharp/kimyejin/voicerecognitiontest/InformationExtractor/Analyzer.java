@@ -1,22 +1,24 @@
-package com.ensharp.kimyejin.voicerecognitiontest;
+package com.ensharp.kimyejin.voicerecognitiontest.InformationExtractor;
 
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.ensharp.kimyejin.voicerecognitiontest.Constant;
+import com.ensharp.kimyejin.voicerecognitiontest.MainActivity;
+import com.ensharp.kimyejin.voicerecognitiontest.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class Analyzer {
 
 	private MainActivity main;
-	JSONTask serverManager;
+	private JSONTask serverManager;
 	private String serverAddress;
 	private boolean isEnd;
 	private String word;
 
-	private Scanner reader = new Scanner(System.in);
 	private String line;
 	private List<String> words = new ArrayList<String>();
 	private String departuralJosa = "에서";

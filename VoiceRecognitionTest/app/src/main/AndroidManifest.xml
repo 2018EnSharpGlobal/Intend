@@ -9,6 +9,22 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
 
+    // for indoor
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    // feature
+    <uses-feature android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
+    <uses-feature android:name="android.hardware.sensor.compass"
+        android:required="true" />
+    <uses-feature android:name="android.hardware.sensor.gyroscope"
+        android:required="true" />
+    <uses-feature android:name="android.hardware.wifi"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,6 +44,14 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="30e21f11970e8f74a033ceb22c65d83e" />
+
+        // for indoor
+        <meta-data
+            android:name="com.indooratlas.android.sdk.API_KEY"
+            android:value="da8c5f63-edff-46df-aed1-46a01237e5bb"/>
+        <meta-data
+            android:name="com.indooratlas.android.sdk.API_SECRET"
+            android:value="yrG1YEQYlDSixxQTmVRpsVFEbliIQr1IOoAJVlSWy2NCQhg3tH7QO2f7ZiGjXS7ZGe2E7h6BcgrbM5MVcyi6minhiVJ+2ZJ2a9xDRTCRjhTETha5t1Tn2s9gv+qGaQ=="/>
 
     </application>
 

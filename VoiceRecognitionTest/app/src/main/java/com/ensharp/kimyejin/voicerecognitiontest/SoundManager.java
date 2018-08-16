@@ -6,8 +6,10 @@ import android.widget.TextView;
 
 import com.kakao.sdk.newtoneapi.SpeechRecognizeListener;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerClient;
+import com.kakao.sdk.newtoneapi.SpeechRecognizerManager;
 import com.kakao.sdk.newtoneapi.TextToSpeechClient;
 import com.kakao.sdk.newtoneapi.TextToSpeechListener;
+import com.kakao.sdk.newtoneapi.TextToSpeechManager;
 
 public class SoundManager implements TextToSpeechListener, SpeechRecognizeListener {
     private MainActivity main;
@@ -23,6 +25,10 @@ public class SoundManager implements TextToSpeechListener, SpeechRecognizeListen
 
     public SoundManager(MainActivity main) {
         this.main = main;
+
+        SpeechRecognizerManager.getInstance().initializeLibrary(main);
+        TextToSpeechManager.getInstance().initializeLibrary(main.getApplicationContext());
+
         isSpeechMode = false;
     }
 

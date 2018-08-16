@@ -1,12 +1,20 @@
 package com.ensharp.kimyejin.voicerecognitiontest;
 
+import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class Analyzer {
 
 	private MainActivity main;
+	JSONTask serverManager;
+	private String serverAddress;
 
 	private Scanner reader = new Scanner(System.in);
 	private String line;
@@ -16,16 +24,19 @@ public class Analyzer {
 
 	private String departure;
 	private String destination;
-	private String intend;	
+	private String intend;
 	
-	public Analyzer(MainActivity main) {
+	public Analyzer(MainActivity main, String address) {
 		this.main = main;
+		serverAddress = String.format("http://%s.ngrok.io/", address);
 	}
 
-	public void analyzeLine(String text) {
+	public void analyzeLine() {
 		clearAllInformation();
-		line = text;
+		line = ((TextView)main.findViewById(R.id.inputText)).getText().toString();
 
+		analyzeWords();
+		printWords();
 	}
 	
 	public void clearAllInformation() {
@@ -37,30 +48,36 @@ public class Analyzer {
 	
 	public void analyzeWords() {		
 		words = line.split(" ");
-		
+
 		for (int i = 0; i < words.length; i++) {
 			separateIntoMorpheme(words[i]);
 		}
 	}
 	
 	public void separateIntoMorpheme(String word) {
+		String temp;
+
 		for (int i = 0; i < josas.length; i++) {
 			if (word.contains(josas[i])) {
 				if (word.indexOf(josas[i]) == word.length() - josas[i].length())
 				{
-					destination = word.substring(0, word.indexOf(josas[i]));
+					temp = word.substring(0, word.indexOf(josas[i]));
+					executeServer("noun","name", temp, Constant.DESTINATION);
 					return;
 				}	
 			}
-
-			checkNoun(word);
-			checkVerb(word);
 		}
-		
+
 		if (word.contains(departuralJosa)) {
 			if (word.indexOf(departuralJosa) == word.length() - departuralJosa.length())
-				departure = word.substring(0, word.indexOf(departuralJosa));
+			{
+				temp = word.substring(0, word.indexOf(departuralJosa));
+				executeServer("noun", "name", temp, Constant.DEPARTURE);
+				return;
+			}
 		}
+
+		executeServer("verb", "name", word, Constant.INTEND);
 	}
 	
 	public void printWords() {
@@ -81,39 +98,37 @@ public class Analyzer {
 		((EditText)main.findViewById(R.id.detailInformation)).setText(stringBuilder.toString());
 	}
 
-	public void checkPoints() {
-		departure = checkPoint(departure);
-		destination = checkPoint(destination);
+	public void executeServer(String table, String column, String value, int purpose) {
+		String address = String.format("%s%s", serverAddress, table);
+
+		serverManager = new JSONTask(column, value, purpose);
+		serverManager.setAnalyzer(this);
+		serverManager.execute(address);
+
+
+		Log.e("DB_SERVER", serverManager.getStatus().toString());
+//		while (serverManager.getStatus() != AsyncTask.Status.FINISHED);
 	}
-	
-	public boolean isLackOfInformation() {
-		if (departure.isEmpty() || intend.isEmpty()) return true;
-		return false;
+
+	public void setDestination() {
+		destination = serverManager.getReturned();
 	}
-	
-	public String checkPoint(String word) {
-		int count = DBManager.count("noun", "name=\"" + word + "\"");
-		String original;
-		
-		if (count > 0) {
-			original = DBManager.getOriginal("noun", "name=\""+word+"\"");
-			
-			return original;
-		}
-		else return "없음";
+
+	public void setDeparture() {
+		departure = serverManager.getReturned();
 	}
-	
-	public void checkNoun(String word) {
-		int count = DBManager.count("noun", "name=\"" + word + "\"");
-		
-		if (count > 0)
-			destination = DBManager.getOriginal("noun", "name=\"" + word + "\"");
+
+	public void setIntend() {
+		intend = serverManager.getReturned();
 	}
-	
-	public void checkVerb(String word) {
-		int count = DBManager.count("verb", "name=\"" + word + "\"");
-		
-		if (count > 0) 
-			intend = DBManager.getOriginal("verb", "name=\""+word+"\"");
+
+	public String getResult() {
+		StringBuilder result = new StringBuilder();
+
+		result.append(String.format("출발지:%s\n", departure));
+		result.append(String.format("도착지:%s\n", destination));
+		result.append(String.format("의도:%s", intend));
+
+		return result.toString();
 	}
 }

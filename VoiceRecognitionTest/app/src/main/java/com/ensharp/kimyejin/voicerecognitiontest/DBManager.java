@@ -79,26 +79,26 @@ public class DBManager {
 	}
 	
 	public static String getOriginal(String table, String condition) {
+
 		query = "SELECT * FROM " + table + " WHERE " + condition;
 		ResultSet rs;
 		String result;
-		
+
 		try {
 			rs = st.executeQuery(query);
 			rs.next();
 			result = rs.getString("part");
-			
+
 			if (rs.wasNull()) {
 				result = select(table, "original", condition);
 			} else {
 				return rs.getString("name");
 			}
-			
+
 			return result;
 		} catch (SQLException e) {
 			System.out.println("DB연결실패");
 		}
-		
 		return "없음";
 	}
 	

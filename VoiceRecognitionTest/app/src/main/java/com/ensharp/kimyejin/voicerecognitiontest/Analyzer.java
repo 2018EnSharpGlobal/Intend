@@ -5,6 +5,9 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -18,9 +21,9 @@ public class Analyzer {
 
 	private Scanner reader = new Scanner(System.in);
 	private String line;
-	private String[] words;
+	private List<String> words = new ArrayList<String>();
 	private String departuralJosa = "에서";
-	private String[] josas = {"에서", "에", "으로", "로", "을", "를"};
+	private String[] josas = {"에", "으로", "로", "을", "를"};
 
 	private String departure;
 	private String destination;
@@ -36,7 +39,7 @@ public class Analyzer {
 		line = ((TextView)main.findViewById(R.id.inputText)).getText().toString();
 
 		analyzeWords();
-		printWords();
+		executeServer("noun", "name", "태능", Constant.END);
 	}
 	
 	public void clearAllInformation() {
@@ -46,11 +49,11 @@ public class Analyzer {
 		intend = "";
 	}
 	
-	public void analyzeWords() {		
-		words = line.split(" ");
+	public void analyzeWords() {
+		words = Arrays.asList(line.split(" "));
 
-		for (int i = 0; i < words.length; i++) {
-			separateIntoMorpheme(words[i]);
+		for (int i = 0; i < words.size(); i++) {
+			separateIntoMorpheme(words.get(i));
 		}
 	}
 	
@@ -81,21 +84,21 @@ public class Analyzer {
 	}
 	
 	public void printWords() {
-		StringBuilder stringBuilder = new StringBuilder();
+//		StringBuilder stringBuilder = new StringBuilder();
+//
+//		if (departure.isEmpty())
+//			departure = "없음";
+//		stringBuilder.append(String.format("출발지 : %s\n", departure));
+//
+//		if (destination.isEmpty())
+//			destination = "없음";
+//		stringBuilder.append(String.format("도착지 : %s\n", destination));
+//
+//		if (intend.isEmpty())
+//			intend = "없음";
+//		stringBuilder.append(String.format("의도 : %s\n", intend));
 
-		if (departure.isEmpty())
-			departure = "없음";
-		stringBuilder.append(String.format("출발지 : %s\n", departure));
-
-		if (destination.isEmpty())
-			destination = "없음";
-		stringBuilder.append(String.format("도착지 : %s\n", destination));
-		
-		if (intend.isEmpty())
-			intend = "없음";
-		stringBuilder.append(String.format("의도 : %s\n", intend));
-
-		((EditText)main.findViewById(R.id.detailInformation)).setText(stringBuilder.toString());
+		((EditText)main.findViewById(R.id.detailInformation)).setText(getResult());
 	}
 
 	public void executeServer(String table, String column, String value, int purpose) {
@@ -104,22 +107,18 @@ public class Analyzer {
 		serverManager = new JSONTask(column, value, purpose);
 		serverManager.setAnalyzer(this);
 		serverManager.execute(address);
-
-
-		Log.e("DB_SERVER", serverManager.getStatus().toString());
-//		while (serverManager.getStatus() != AsyncTask.Status.FINISHED);
 	}
 
-	public void setDestination() {
-		destination = serverManager.getReturned();
+	public void setDestination(String destination) {
+		this.destination = destination;
 	}
 
-	public void setDeparture() {
-		departure = serverManager.getReturned();
+	public void setDeparture(String departure) {
+		this.departure = departure;
 	}
 
-	public void setIntend() {
-		intend = serverManager.getReturned();
+	public void setIntend(String intend) {
+		this.intend = intend;
 	}
 
 	public String getResult() {

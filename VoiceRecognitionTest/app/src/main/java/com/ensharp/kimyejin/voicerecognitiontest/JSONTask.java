@@ -1,6 +1,7 @@
 package com.ensharp.kimyejin.voicerecognitiontest;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -18,7 +19,6 @@ import java.net.URL;
 public class JSONTask extends AsyncTask<String, String, String> {
 
     private Analyzer analyzer;
-    private String returned;
 
     private String column;
     private String value;
@@ -32,6 +32,8 @@ public class JSONTask extends AsyncTask<String, String, String> {
         this.column = column;
         this.value = value;
         this.purpose = purpose;
+
+        Log.e("aaaa_mode", "value:"+value+"\n");
     }
 
     @Override
@@ -113,26 +115,27 @@ public class JSONTask extends AsyncTask<String, String, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
-        returned = result;
-
         switch (purpose) {
             case Constant.DESTINATION:
-                analyzer.setDestination();
+                analyzer.setDestination(result);
+                Log.e("aaaa_mode", "destination");
                 break;
             case Constant.DEPARTURE:
-                analyzer.setDeparture();
+                analyzer.setDeparture(result);
+                Log.e("aaaa_mode", "departure");
                 break;
             case Constant.INTEND:
-                analyzer.setIntend();
+                analyzer.setIntend(result);
+                Log.e("aaaa_mode", "intend");
+                break;
+            case Constant.END:
+                Log.e("aaaa_mode", "end");
+                analyzer.printWords();
                 break;
         }
     }
 
     public void setAnalyzer(Analyzer analyzer) {
         this.analyzer = analyzer;
-    }
-
-    public String getReturned() {
-        return returned;
     }
 }

@@ -8,4 +8,6 @@ public class Constant {
 
     public static final int NOUN = 4;
     public static final int VERB = 5;
+
+    public static final int CODE_PERMISSIONS = 0;
 }

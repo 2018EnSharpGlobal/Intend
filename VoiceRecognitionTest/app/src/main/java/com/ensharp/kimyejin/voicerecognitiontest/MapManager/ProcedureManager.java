@@ -26,31 +26,20 @@ public class ProcedureManager {
         use_elevator = false;
         use_stair = false;
 
-        // 임의로 생성한 노드
-//        Node initialNode = new Node(4, 1);
-//        initialNode.setFloor(-1);
-//        Node finalNode = new Node(95, 13);
-//        finalNode.setFloor(-1);
-
         path = null;
 
         floor = null;
         other_floor = null;
 
-        //underGround_1 = new Navigation(MapInfo.map_rows,MapInfo.map_cols ,MapInfo.B1);
         underGround_1 = null;
         underGround_2 = null;
         underGround_3 = null;
-//        underGround_1.set_Initail_Final_Node(initialNode, finalNode);
-//        underGround_1.setNodes();
-//        underGround_1.setInformations(block);
-//        underGround_2 = new Navigation(MapInfo.map_rows, MapInfo.map_cols, MapInfo.B2);
-//        underGround_3 = new Navigation(MapInfo.map_rows, MapInfo.map_cols, MapInfo.B3);
     }
 
     //초기 위치부터 목적지 위치까지 경로 리스트 얻기
     public List<Node> detect_Path(String destination) {
-        Node initialNode = get_currentNode();
+        //Node initialNode = get_currentNode();
+        Node initialNode = new Node(95,15);
         Node finalNode = get_destinationNode(destination);
 
         underGround_1 = new Navigation(MapInfo.map_rows, MapInfo.map_cols,MapInfo.B1);
@@ -74,7 +63,7 @@ public class ProcedureManager {
                     break;
             }
 
-            initial_Navi.setInitialNode(get_currentNode());
+            //initial_Navi.setInitialNode(get_currentNode());
 
             switch (finalNode.getFloor()) {
                 case MapInfo.B1:
@@ -100,14 +89,14 @@ public class ProcedureManager {
                 }
                 switch (initialNode.getFloor()) {
                     case MapInfo.B1:
-                        check_Elevator[0] = underGround_1.calculate_F(initialNode, underGround_1.getSearchArea()[5][1]);
-                        check_Elevator[1] = underGround_1.calculate_F(initialNode, underGround_1.getSearchArea()[5][2]);
+                        check_Elevator[0] = underGround_1.calculate_F(initialNode, underGround_1.getSearchArea()[7][67]);
+                        check_Elevator[1] = underGround_1.calculate_F(initialNode, underGround_1.getSearchArea()[15][67]);
                         check_Elevator[2] = underGround_1.calculate_F(initialNode, underGround_1.getSearchArea()[5][3]);
                         check_Elevator[3] = underGround_1.calculate_F(initialNode, underGround_1.getSearchArea()[5][4]);
                         break;
                     case MapInfo.B2:
-                        check_Elevator[0] = underGround_2.calculate_F(initialNode, underGround_2.getSearchArea()[5][1]);
-                        check_Elevator[1] = underGround_2.calculate_F(initialNode, underGround_2.getSearchArea()[5][2]);
+                        check_Elevator[0] = underGround_1.calculate_F(initialNode, underGround_2.getSearchArea()[7][67]);
+                        check_Elevator[1] = underGround_1.calculate_F(initialNode, underGround_2.getSearchArea()[15][67]);
                         check_Elevator[2] = underGround_2.calculate_F(initialNode, underGround_2.getSearchArea()[5][3]);
                         check_Elevator[3] = underGround_2.calculate_F(initialNode, underGround_2.getSearchArea()[5][4]);
                         break;
@@ -355,7 +344,7 @@ public class ProcedureManager {
     }
 
     //사용자 현재 위치의 노드 얻긴
-    public Node get_currentNode() {
+    public String get_currentNode() {
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         int floor = location.getFloor();
@@ -376,11 +365,12 @@ public class ProcedureManager {
         current_Node = new Node(count_row, count_col);
         current_Node.setFloor(floor);
 
-        if (count_row < 0 || count_col < 0) {
-            return null;
-        } else {
-            return current_Node;
-        }
+        return String.valueOf(count_row) + "," + String.valueOf(count_col);
+//        if (count_row < 0 || count_col < 0) {
+//            return null;
+//        } else {
+//            return current_Node;
+//        }
     }
 
     //목적지에 대한 노드 얻기

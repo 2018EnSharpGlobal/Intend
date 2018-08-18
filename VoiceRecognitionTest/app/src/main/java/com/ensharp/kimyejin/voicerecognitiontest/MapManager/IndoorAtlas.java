@@ -15,15 +15,26 @@ public class IndoorAtlas{
     private MainActivity main;
     private LocationVO location = LocationVO.getInstance();
 
+    private ProcedureManager procedureManager;
+
     public IndoorAtlas(MainActivity main) {
         this.main = main;
+        procedureManager = new ProcedureManager();
     }
 
     IALocationListener locationListener = new IALocationListener() {
         @Override
         public void onLocationChanged(IALocation iaLocation) {
-            ((TextView)main.findViewById(R.id.indoorText)).setText(String.valueOf(iaLocation.getLatitude() +","+iaLocation.getLongitude()+" , "+iaLocation.getBearing()+","+iaLocation.getFloorLevel()));
+
+            //((TextView)main.findViewById(R.id.indoorText)).setText(String.valueOf(iaLocation.getLatitude() +","+iaLocation.getLongitude()+" , "+iaLocation.getBearing()+","+iaLocation.getFloorLevel()));
+            ((TextView)main.findViewById(R.id.indoorText)).setText(procedureManager.get_currentNode());
             location.setLocation(iaLocation.getLatitude(), iaLocation.getLongitude(), iaLocation.getFloorLevel());
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override

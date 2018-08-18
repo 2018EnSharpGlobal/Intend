@@ -16,7 +16,9 @@ import com.indooratlas.android.sdk.IALocationRequest;
 public class IndoorAtlas{
 
     private MainActivity main;
-    IALocationManager locationManager;
+    public static double latitude;
+    public static double longitude;
+    public static int floor;
 
     public IndoorAtlas(MainActivity main) {
         this.main = main;
@@ -26,7 +28,11 @@ public class IndoorAtlas{
         @Override
         public void onLocationChanged(IALocation iaLocation) {
             Log.e(main.getClass().getName(),String.valueOf("---------------------------------♡♡"+iaLocation.getLatitude() +","+iaLocation.getLongitude()));
-            ((TextView)main.findViewById(R.id.indoorText)).setText(String.valueOf(iaLocation.getLatitude() +","+iaLocation.getLongitude()+" , "+iaLocation.getBearing()));
+            ((TextView)main.findViewById(R.id.indoorText)).setText(String.valueOf(iaLocation.getLatitude() +","+iaLocation.getLongitude()+" , "+iaLocation.getBearing()+","+iaLocation.getFloorLevel()));
+
+            latitude = iaLocation.getLatitude();
+            longitude = iaLocation.getLongitude();
+            floor =iaLocation.getFloorLevel();
         }
 
         @Override
@@ -36,6 +42,5 @@ public class IndoorAtlas{
     };
 
     public IALocationManager getLocationManager() {return IALocationManager.create(main);}
-
     public IALocationListener getLocationListener() {return locationListener;}
 }

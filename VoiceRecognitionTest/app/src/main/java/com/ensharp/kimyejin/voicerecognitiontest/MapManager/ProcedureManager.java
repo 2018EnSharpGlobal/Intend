@@ -1,13 +1,14 @@
 package com.ensharp.kimyejin.voicerecognitiontest.MapManager;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
+
+import com.ensharp.kimyejin.voicerecognitiontest.LocationVO;
 
 import java.util.List;
 
 public class ProcedureManager {
+
+    LocationVO location = LocationVO.getInstance();
 
     boolean use_elevator;
     boolean use_stair;
@@ -355,22 +356,25 @@ public class ProcedureManager {
 
     //사용자 현재 위치의 노드 얻긴
     public Node get_currentNode() {
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        int floor = location.getFloor();
         Node current_Node = null;
-        IndoorAtlas.latitude -= 37.54715706;
-        IndoorAtlas.longitude -= 127.07383858;
+//        latitude -= 37.54715706;
+//        longitude -= 127.07383858;
 
         double b = 93806;
         double a = 158983;
         double c = 184595;
 
-        IndoorAtlas.latitude = ((a / c) * IndoorAtlas.latitude) + ((b / c) * IndoorAtlas.longitude) ;
-        IndoorAtlas.longitude  = ((-b / c) * IndoorAtlas.latitude) + ((a / c) * IndoorAtlas.longitude) ;
+        latitude = ((a / c) * latitude) + ((b / c) * longitude) ;
+        longitude  = ((-b / c) * latitude) + ((a / c) * longitude) ;
 
-        int count_row = Integer.parseInt(String.valueOf(IndoorAtlas.latitude / 0.00001999));
-        int count_col = Integer.parseInt(String.valueOf(IndoorAtlas.longitude / 0.00002148));
+        int count_row = Integer.parseInt(String.valueOf(latitude / 0.00001999));
+        int count_col = Integer.parseInt(String.valueOf(longitude / 0.00002148));
 
         current_Node = new Node(count_row, count_col);
-        current_Node.setFloor(IndoorAtlas.floor);
+        current_Node.setFloor(floor);
 
         if (count_row < 0 || count_col < 0) {
             return null;

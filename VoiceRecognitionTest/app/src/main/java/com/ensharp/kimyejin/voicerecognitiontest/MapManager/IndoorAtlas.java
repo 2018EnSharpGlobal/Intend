@@ -1,24 +1,19 @@
 package com.ensharp.kimyejin.voicerecognitiontest.MapManager;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import com.ensharp.kimyejin.voicerecognitiontest.LocationVO;
 import com.ensharp.kimyejin.voicerecognitiontest.MainActivity;
 import com.ensharp.kimyejin.voicerecognitiontest.R;
 import com.indooratlas.android.sdk.IALocation;
 import com.indooratlas.android.sdk.IALocationListener;
 import com.indooratlas.android.sdk.IALocationManager;
-import com.indooratlas.android.sdk.IALocationRequest;
 
 public class IndoorAtlas{
 
     private MainActivity main;
-    public static double latitude;
-    public static double longitude;
-    public static int floor;
+    private LocationVO location = LocationVO.getInstance();
 
     public IndoorAtlas(MainActivity main) {
         this.main = main;
@@ -27,12 +22,8 @@ public class IndoorAtlas{
     IALocationListener locationListener = new IALocationListener() {
         @Override
         public void onLocationChanged(IALocation iaLocation) {
-            Log.e(main.getClass().getName(),String.valueOf("---------------------------------♡♡"+iaLocation.getLatitude() +","+iaLocation.getLongitude()));
             ((TextView)main.findViewById(R.id.indoorText)).setText(String.valueOf(iaLocation.getLatitude() +","+iaLocation.getLongitude()+" , "+iaLocation.getBearing()+","+iaLocation.getFloorLevel()));
-
-            latitude = iaLocation.getLatitude();
-            longitude = iaLocation.getLongitude();
-            floor =iaLocation.getFloorLevel();
+            location.setLocation(iaLocation.getLatitude(), iaLocation.getLongitude(), iaLocation.getFloorLevel());
         }
 
         @Override

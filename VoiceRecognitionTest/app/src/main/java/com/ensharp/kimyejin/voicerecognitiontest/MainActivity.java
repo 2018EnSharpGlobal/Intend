@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Analyzer analyzer;
     private String address = "159d84ae";
     private IndoorAtlas indoor;
-    IALocationManager locationManager;
+    private IALocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
